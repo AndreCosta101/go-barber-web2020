@@ -1,9 +1,12 @@
 import styled, { css } from 'styled-components';
 
+import Tooltip from '../Tooltip';
+
 // tipagem do componente Container para definir o focus
 interface ContainerProps {
   isFocused: boolean;
   isFilled: boolean;
+  isErrored: boolean;
 }
 
 
@@ -23,6 +26,11 @@ export const Container = styled.div<ContainerProps>`
   & + div{
         margin-top: 8px;
       }
+//ficando acima das outras verificações, as de baixo terão mais poder
+// o resultado é que ao dar foco no erro, a borda fica laranja de novo.
+ ${props => props.isErrored && css`
+      border-color: #c53030;
+  `}
 
   // definição do prop isFocused = true
   ${props => props.isFocused && css`
@@ -34,6 +42,8 @@ export const Container = styled.div<ContainerProps>`
   ${props => props.isFilled && css`
       color: #ff9000;
   `}
+
+
 
 
 
@@ -52,4 +62,23 @@ export const Container = styled.div<ContainerProps>`
     svg {
       margin-right: 16px;
     }
+`;
+
+// elemento superior Error, passando estilização pro tooltip
+// através da classe.
+export const Error = styled(Tooltip)`
+  height: 20px;
+  margin-left: 16px;
+  svg {
+    margin: 0;
+  }
+
+  span {
+    background: #c53030;
+    color:#fff;
+
+    &::before{
+    border-color: #c53030 transparent;
+    }
+  }
 `;

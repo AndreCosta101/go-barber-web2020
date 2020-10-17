@@ -19,6 +19,7 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = useCallback(async (data: object) => {
     try {
+      //zerar os erros, para a mensagem de erro sumir ao gravar pela segunda vez.
       formRef.current?.setErrors({})
 
       const schema = Yup.object().shape({
