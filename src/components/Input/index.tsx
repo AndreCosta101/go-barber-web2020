@@ -13,9 +13,11 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input: React.FC<InputProps> = ({ name, icon: Icon, ...restante }) => {
   //useRef nos dá acesso ao input value em inputRef.current
+  // o useRef pega elementos HTML da DOM
   const inputRef = useRef<HTMLInputElement>(null)
   const [isFocused, setIsFocused] = useState(false)
   const [isFilled, setIsFilled] = useState(false)
+
   const { fieldName, defaultValue, error, registerField } = useField(name);
 
   const handleInputFocus = useCallback(() => {
@@ -39,11 +41,13 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...restante }) => {
   }, [fieldName, registerField])
 
   return (
-    // prop isFocused
+    // prop isFocused e isFilled. Olha a tipagem nos styles.ts
     <Container isFilled={isFilled} isFocused={isFocused}>
       {Icon && <Icon size={20} />}
       <input
+        // ganhou o Foco
         onFocus={handleInputFocus}
+        // perdeu o Foco
         onBlur={handleInputBlur}
         defaultValue={defaultValue}
         ref={inputRef}
