@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useContext } from 'react';
-import { FiLogIn, FiMail, FiLock } from 'react-icons/fi'
+import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 
-import { FormHandles } from '@unform/core'
+import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 
@@ -10,9 +10,8 @@ import getValidationErrors from '../../utils/getValidationErrors';
 
 import logoImg from '../../assets/logo.svg';
 
-
-import Input from '../../components/Input'
-import Button from '../../components/Button'
+import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 import { Container, Content, Background } from './styles';
 
@@ -22,42 +21,48 @@ interface SignInFormData {
 }
 
 const SignIn: React.FC = () => {
-  const formRef = useRef<FormHandles>(null)
+  const formRef = useRef<FormHandles>(null);
 
   const { user, signIn } = useAuth();
 
-  console.log(user)
+  console.log(user);
 
-  const handleSubmit = useCallback(async (data: SignInFormData) => {
-    try {
-      //zerar os erros, para a mensagem de erro sumir ao gravar pela segunda vez.
-      formRef.current?.setErrors({})
+  const handleSubmit = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        // zerar os erros, para a mensagem de erro sumir ao gravar pela segunda vez.
+        formRef.current?.setErrors({});
 
-      const schema = Yup.object().shape({
-        email: Yup.string().required('Email obrigatório').email('Digite um email válido'),
-        password: Yup.string().required('Senha obrigatória'),
-      })
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('Email obrigatório')
+            .email('Digite um email válido'),
+          password: Yup.string().required('Senha obrigatória'),
+        });
 
-      /*
-        * o Yup tem como padrão retornar apenas o ultimo erro que encontra.
-        * o abortEarly: false faz ele retornar todos os erros.
-      */
-      await schema.validate(data, {
-        abortEarly: false
-      });
+        /*
+         * o Yup tem como padrão retornar apenas o ultimo erro que encontra.
+         * o abortEarly: false faz ele retornar todos os erros.
+         */
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      // passada a validação, vem a função signIn
-      signIn({
-        email: data.email,
-        password: data.password
-      });
+        // passada a validação, vem a função signIn
+        signIn({
+          email: data.email,
+          password: data.password,
+        });
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
 
-    } catch (err) {
-      const errors = getValidationErrors(err)
+          formRef.current?.setErrors(errors);
+        }
 
-      formRef.current?.setErrors(errors)
-    }
-  },
+        // disparar um toast
+      }
+    },
     // a funçao signIn vem aqui como segundo parâmetro da useCallback
     [signIn],
   );
@@ -72,7 +77,12 @@ const SignIn: React.FC = () => {
 
           <Input name="email" icon={FiMail} placeholder="E-mail" />
 
-          <Input name="password" icon={FiLock} type="password" placeholder="Senha" />
+          <Input
+            name="password"
+            icon={FiLock}
+            type="password"
+            placeholder="Senha"
+          />
 
           <Button type="submit">Entrar</Button>
 
@@ -81,14 +91,12 @@ const SignIn: React.FC = () => {
 
         <a href="login">
           <FiLogIn />
-        Criar Conta
-      </a>
+          Criar Conta
+        </a>
       </Content>
       <Background />
-    </Container >
-  )
-}
-
-
+    </Container>
+  );
+};
 
 export default SignIn;
