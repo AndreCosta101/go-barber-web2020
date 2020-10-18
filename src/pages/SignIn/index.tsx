@@ -1,11 +1,12 @@
-import React, { useCallback, useRef, useContext } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 
-import { useAuth } from '../../hooks/AuthContext';
+import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import logoImg from '../../assets/logo.svg';
@@ -24,6 +25,7 @@ const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const { user, signIn } = useAuth();
+  const { addToast } = useToast();
 
   console.log(user);
 
@@ -49,7 +51,7 @@ const SignIn: React.FC = () => {
         });
 
         // passada a validação, vem a função signIn
-        signIn({
+        await signIn({
           email: data.email,
           password: data.password,
         });
@@ -60,11 +62,11 @@ const SignIn: React.FC = () => {
           formRef.current?.setErrors(errors);
         }
 
-        // disparar um toast
+        addToast();
       }
     },
     // a funçao signIn vem aqui como segundo parâmetro da useCallback
-    [signIn],
+    [signIn, addToast],
   );
 
   return (

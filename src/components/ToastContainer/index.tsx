@@ -45,4 +45,5 @@ const ToastContainer: React.FC = () => (
   </Container>
 );
 
+// vai ser usado dentro do hook de toast.
 export default ToastContainer;
