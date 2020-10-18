@@ -27,6 +27,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "max-len": "off",
     "operator-linebreak": "off",
     "implicit-arrow-linebreak": "off",
     "arrow-parens": "off",
